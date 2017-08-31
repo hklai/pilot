@@ -1,3 +1,5 @@
+test
+
 # Proxy sidecar injection
 
 ## Automatic injection
