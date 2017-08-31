@@ -784,11 +784,10 @@ func ValidateDestinationPolicy(msg proto.Message) error {
 	}
 
 	var errs error
-	// TODO: figure out if destination is required
-	if policy.Destination != nil {
-		if err := ValidateIstioService(policy.Destination); err != nil {
-			errs = multierror.Append(errs, err)
-		}
+	if policy.Destination == nil {
+		errs = multierror.Append(errs, errors.New("destination is required in the destination policy"))
+	} else if err := ValidateIstioService(policy.Destination); err != nil {
+		errs = multierror.Append(errs, err)
 	}
 
 	if policy.Source != nil {
@@ -807,6 +806,10 @@ func ValidateDestinationPolicy(msg proto.Message) error {
 		if err := ValidateCircuitBreaker(policy.CircuitBreaker); err != nil {
 			errs = multierror.Append(errs, err)
 		}
+	}
+
+	if policy.Policy != nil {
+		errs = multierror.Append(errs, errors.New("policy field has been deprecated"))
 	}
 
 	return errs

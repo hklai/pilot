@@ -58,10 +58,8 @@ var (
 		Destination: &proxyconfig.IstioService{
 			Name: "world",
 		},
-		Policy: []*proxyconfig.DestinationVersionPolicy{
-			{LoadBalancing: &proxyconfig.LoadBalancing{
-				LbPolicy: &proxyconfig.LoadBalancing_Name{Name: proxyconfig.LoadBalancing_RANDOM},
-			}},
+		LoadBalancing: &proxyconfig.LoadBalancing{
+			LbPolicy: &proxyconfig.LoadBalancing_Name{Name: proxyconfig.LoadBalancing_RANDOM},
 		},
 	}
 )
