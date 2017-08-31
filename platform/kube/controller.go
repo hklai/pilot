@@ -265,7 +265,7 @@ func (c *Controller) ManagementPorts(addr string) model.PortList {
 }
 
 // Instances implements a service catalog operation
-func (c *Controller) Instances(hostname string, ports []string, tagsList model.TagsList) []*model.ServiceInstance {
+func (c *Controller) Instances(hostname string, ports []string, tagsList model.LabelsCollection) []*model.ServiceInstance {
 	// Get actual service by name
 	name, namespace, err := parseHostname(hostname)
 	if err != nil {
@@ -320,7 +320,7 @@ func (c *Controller) Instances(hostname string, ports []string, tagsList model.T
 									ServicePort: svcPort,
 								},
 								Service:          svc,
-								Tags:             tags,
+								Labels:           tags,
 								AvailabilityZone: az,
 								ServiceAccount:   sa,
 							})
@@ -369,7 +369,7 @@ func (c *Controller) HostInstances(addrs map[string]bool) []*model.ServiceInstan
 								ServicePort: svcPort,
 							},
 							Service:          svc,
-							Tags:             tags,
+							Labels:           tags,
 							AvailabilityZone: az,
 							ServiceAccount:   sa,
 						})
@@ -390,7 +390,7 @@ func (c *Controller) GetIstioServiceAccounts(hostname string, ports []string) []
 
 	// Get the service accounts running service within Kubernetes. This is reflected by the pods that
 	// the service is deployed on, and the service accounts of the pods.
-	for _, si := range c.Instances(hostname, ports, model.TagsList{}) {
+	for _, si := range c.Instances(hostname, ports, model.LabelsCollection{}) {
 		if si.ServiceAccount != "" {
 			saSet[si.ServiceAccount] = true
 		}
