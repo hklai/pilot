@@ -411,5 +411,5 @@ func newClient() (*crd.Client, error) {
 	return crd.NewClient(kubeconfig, model.ConfigDescriptor{
 		model.RouteRule,
 		model.DestinationPolicy,
-	})
+	}, "")
 }
