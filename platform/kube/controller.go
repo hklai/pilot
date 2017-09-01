@@ -266,7 +266,7 @@ func (c *Controller) ManagementPorts(addr string) model.PortList {
 
 // Instances implements a service catalog operation
 func (c *Controller) Instances(hostname string, ports []string,
-	tagsList model.LabelsCollection) []*model.ServiceInstance {
+	labelsList model.LabelsCollection) []*model.ServiceInstance {
 	// Get actual service by name
 	name, namespace, err := parseHostname(hostname)
 	if err != nil {
@@ -298,9 +298,9 @@ func (c *Controller) Instances(hostname string, ports []string,
 			var out []*model.ServiceInstance
 			for _, ss := range ep.Subsets {
 				for _, ea := range ss.Addresses {
-					tags, _ := c.pods.tagsByIP(ea.IP)
-					// check that one of the input tags is a subset of the tags
-					if !tagsList.HasSubsetOf(tags) {
+					labels, _ := c.pods.labelsByIP(ea.IP)
+					// check that one of the input labels is a subset of the labels
+					if !labelsList.HasSubsetOf(labels) {
 						continue
 					}
 
@@ -321,7 +321,7 @@ func (c *Controller) Instances(hostname string, ports []string,
 									ServicePort: svcPort,
 								},
 								Service:          svc,
-								Labels:           tags,
+								Labels:           labels,
 								AvailabilityZone: az,
 								ServiceAccount:   sa,
 							})
@@ -356,7 +356,7 @@ func (c *Controller) HostInstances(addrs map[string]bool) []*model.ServiceInstan
 						if !exists {
 							continue
 						}
-						tags, _ := c.pods.tagsByIP(ea.IP)
+						labels, _ := c.pods.labelsByIP(ea.IP)
 						pod, exists := c.pods.getPodByIP(ea.IP)
 						az, sa := "", ""
 						if exists {
@@ -370,7 +370,7 @@ func (c *Controller) HostInstances(addrs map[string]bool) []*model.ServiceInstan
 								ServicePort: svcPort,
 							},
 							Service:          svc,
-							Labels:           tags,
+							Labels:           labels,
 							AvailabilityZone: az,
 							ServiceAccount:   sa,
 						})
